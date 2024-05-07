@@ -52,7 +52,8 @@ def main(args):
         conf = np.array(obj["conf"])
 
         # Get (first args.max_detections_per_object) most reliable detections
-        det_idx_most_conf = np.argsort(conf)[::-1][: args.max_detections_per_object]
+        det_idx_most_conf = np.argsort(
+            conf)[::-1][: args.max_detections_per_object]
 
         # If less than two reliable detections, skip object
         if (len(det_idx_most_conf)) < 2:
@@ -66,7 +67,8 @@ def main(args):
 
         for det_idx in tqdm(det_idx_most_conf, desc="Iterating over detections..."):
 
-            image = Image.open(obj["color_path"][det_idx]).convert("RGB")  # image
+            image = Image.open(obj["color_path"][det_idx]
+                               ).convert("RGB")  # image
             xyxy = obj["xyxy"][det_idx]  # bounding box
             class_id = obj["class_id"][det_idx]  # object class
             # TODO: get class name
@@ -88,26 +90,38 @@ def main(args):
 
         # Add object captions to caption_dict_list
         caption_dict_list.append(
-            {"id": obj_idx, "captions": captions, "low_confidences": low_confidences}
-        )
+            {"id": obj_idx,
+             "captions": captions,
+             "low_confidences": low_confidences})
 
     # Save captions to JSON a file
-    save_as_json(
-        obj=caption_dict_list, file_path=os.path.join(args.cachedir, RESULT_FILENAME)
-    )
+    save_as_json(obj=caption_dict_list,
+                 file_path=os.path.join(args.result_dir, RESULT_FILENAME))
 
 
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description="TODO: program description")
 
-    parser.add_argument(
-        "--map-file", "-m", type=str, required=True, help="Path to the map file"
-    )
+    parser.add_argument("--map-file",
+                        "-m",
+                        type=str,
+                        required=True,
+                        help="Path to the map file")
 
-    parser.add_argument(  # TODO: help
-        "--max-detections-per-object", "-d", type=int, default=10, help=""
-    )
+    # TODO: help
+    parser.add_argument("--max-detections-per-object",
+                        "-d",
+                        type=int,
+                        default=10,
+                        help="")
+
+    # TODO: help
+    parser.add_argument("--result-dir",
+                        "-r",
+                        type=str,
+                        required=True,
+                        help="")
 
     args = parser.parse_args()
 
