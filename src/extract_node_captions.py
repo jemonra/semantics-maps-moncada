@@ -1,5 +1,7 @@
 import argparse
 import gzip
+import json
+import os
 import pickle
 from pathlib import Path
 
@@ -8,9 +10,10 @@ from PIL import Image
 from tqdm import tqdm
 
 import slam.slam_classes
+from utils.file_utils import save_as_json
 from utils.image_utils import crop_image_and_mask
 
-MAP_FILE = "/home/ubuntu/tfg_jesus_moncada_ramirez/"
+RESULT_FILENAME = "cfslam_llava_captions.json"
 
 
 def load_scene_map(map_file_path: str):
@@ -38,6 +41,8 @@ def main(args):
 
     # Load the scene map
     scene_map = load_scene_map(map_file_path=args.map_file)
+
+    caption_dict_list = []
 
     for obj_idx, obj in tqdm(
         enumerate(scene_map), total=len(scene_map), desc="Iterating over objects..."
@@ -80,6 +85,16 @@ def main(args):
 
             # TODO: Gemini call, save result to "captions"
             captions.append("TODO")
+
+        # Add object captions to caption_dict_list
+        caption_dict_list.append(
+            {"id": obj_idx, "captions": captions, "low_confidences": low_confidences}
+        )
+
+    # Save captions to JSON a file
+    save_as_json(
+        obj=caption_dict_list, file_path=os.path.join(args.cachedir, RESULT_FILENAME)
+    )
 
 
 if __name__ == "__main__":
