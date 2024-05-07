@@ -5,7 +5,7 @@ from typing import List
 import google.cloud.aiplatform as aiplatform
 import google.oauth2.service_account
 from PIL import Image as PILImage
-from vertexai.preview.generative_models import Image as GeminiImage
+from vertexai.preview.generative_models import GenerativeModel, Image as GeminiImage
 
 from llm.llm_service import LLMService
 

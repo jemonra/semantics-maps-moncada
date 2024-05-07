@@ -40,7 +40,7 @@ def load_scene_map(map_file_path: str):
 def main(args):
 
     # Load the scene map
-    scene_map = load_scene_map(map_file_path=args.map_file)
+    scene_map = load_scene_map(map_file_path=args.map_file_path)
 
     caption_dict_list = []
 
@@ -67,14 +67,17 @@ def main(args):
 
         for det_idx in tqdm(det_idx_most_conf, desc="Iterating over detections..."):
 
-            image = Image.open(obj["color_path"][det_idx]
-                               ).convert("RGB")  # image
-            xyxy = obj["xyxy"][det_idx]  # bounding box
+            image = Image.open(
+                obj["color_path"][det_idx]).convert("RGB")  # image
+            image.show()
+
+            x1, y1, x2, y2 = obj["xyxy"][det_idx]  # bounding box
             class_id = obj["class_id"][det_idx]  # object class
             # TODO: get class name
             mask = obj["mask"][det_idx]  # mask # TODO: what is the mask?
 
-            cropped_image, cropped_mask = crop_image_and_mask(image, mask)
+            cropped_image, cropped_mask = crop_image_and_mask(
+                image, mask, x1, y1, x2, y2)
             # TODO: modify cropped_image!
 
             if cropped_image.size[0] * cropped_image.size[1] < 70 * 70:
@@ -96,14 +99,14 @@ def main(args):
 
     # Save captions to JSON a file
     save_as_json(obj=caption_dict_list,
-                 file_path=os.path.join(args.result_dir, RESULT_FILENAME))
+                 file_path=os.path.join(args.result_dir_path, RESULT_FILENAME))
 
 
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description="TODO: program description")
 
-    parser.add_argument("--map-file",
+    parser.add_argument("--map-file-path",
                         "-m",
                         type=str,
                         required=True,
@@ -117,7 +120,7 @@ if __name__ == "__main__":
                         help="")
 
     # TODO: help
-    parser.add_argument("--result-dir",
+    parser.add_argument("--result-dir-path",
                         "-r",
                         type=str,
                         required=True,

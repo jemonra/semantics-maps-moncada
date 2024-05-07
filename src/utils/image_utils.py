@@ -2,9 +2,7 @@ import numpy as np
 from PIL import Image
 
 
-def crop_image_and_mask(
-    image: Image, mask: np.ndarray, x1: int, y1: int, x2: int, y2: int, padding: int = 0
-):
+def crop_image_and_mask(image: Image, mask: np.ndarray, x1: int, y1: int, x2: int, y2: int, padding: int = 0):
     """
     TODO
     """
