@@ -105,8 +105,8 @@ class LLMService(ABC):
                 return response  # Return the valid JSON response
 
             except Exception as e:
-                self._info(f"Error generating JSON on attempt {
-                           attempt}: {str(e)}")
+                self._info(
+                    f"Error generating JSON on attempt {attempt}: {str(e)}")
                 attempt += 1  # Increment attempt counter
 
         self._info("Couldn't get a valid JSON response, max attempts exceeded")
@@ -138,8 +138,8 @@ class LLMService(ABC):
                 return response  # Return the valid JSON response
 
             except Exception as e:
-                self._info(f"Error generating JSON on attempt {
-                           attempt}: {str(e)}")
+                self._info(
+                    f"Error generating JSON on attempt {attempt}: {str(e)}")
                 attempt += 1  # Increment attempt counter
 
             attempt += 1

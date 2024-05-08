@@ -69,16 +69,15 @@ def main(args):
 
             image = Image.open(
                 obj["color_path"][det_idx]).convert("RGB")  # image
-            image.show()
 
             x1, y1, x2, y2 = obj["xyxy"][det_idx]  # bounding box
             class_id = obj["class_id"][det_idx]  # object class
             # TODO: get class name
-            mask = obj["mask"][det_idx]  # mask # TODO: what is the mask?
+            mask = obj["mask"][det_idx]  # mask
 
             cropped_image, cropped_mask = crop_image_and_mask(
-                image, mask, x1, y1, x2, y2)
-            # TODO: modify cropped_image!
+                image, mask, x1, y1, x2, y2, padding=args.object_images_padding)
+            # TODO: apply masking option? modify cropped_image?
 
             if cropped_image.size[0] * cropped_image.size[1] < 70 * 70:
                 low_confidences.append(True)
@@ -124,6 +123,13 @@ if __name__ == "__main__":
                         "-r",
                         type=str,
                         required=True,
+                        help="")
+
+    # TODO: help
+    parser.add_argument("--object-images-padding",
+                        "-p",
+                        type=int,
+                        default=50,
                         help="")
 
     args = parser.parse_args()

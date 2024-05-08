@@ -17,7 +17,7 @@ class GoogleGeminiProvider(LLMService):
 
     VISION_MODELS = (GEMINI_1_0_PRO_VISION,)
 
-    def __init__(self, credentials_file: str, project_id: str, project_location: str, model_name: str, max_input_characters: int):
+    def __init__(self, credentials_file: str, project_id: str, project_location: str, model_name: str):
         """
         TODO: create python docstrings
         """
@@ -34,17 +34,18 @@ class GoogleGeminiProvider(LLMService):
             model_name=model_name
         )
 
-        self.max_input_characters = max_input_characters
-
     def get_provider_name(self) -> str:
         return f"Google_{self.model_name}"
 
     def generate_text(self, prompt: str) -> str:
-        prompt = self._check_max_characters(
-            prompt, self.max_input_characters)
         response = self.model.generate_content(prompt)
-        response = response.candidates[0].content.parts[0].text
-        return response
+
+        try:
+            response_text = response.candidates[0].content.parts[0].text
+        # VertexAI bug running on conda (https://github.com/googleapis/python-aiplatform/issues/3129)
+        except TypeError:
+            response_text = response.candidates[0].content.parts[0]._raw_part.text
+        return response_text
 
     def pil_image_to_gemini_image(pil_image: PILImage.Image):
         # Create a bytes buffer
@@ -64,13 +65,16 @@ class GoogleGeminiProvider(LLMService):
             raise NotImplementedError(
                 f"Model {self.model_name} doesn't accept images")
 
-        prompt = self._check_max_characters(
-            prompt, self.max_input_characters)
         combined_prompt = [prompt]
         for image in pil_images[:16]:  # Limit to 16 images (API limit)
 
             image = self.pil_image_to_gemini_image(image)
             combined_prompt.append(image)
         response = self.model.generate_content(combined_prompt)
-        response_text = response.candidates[0].content.parts[0].text
+        try:
+            response_text = response.candidates[0].content.parts[0].text
+        # VertexAI bug running on conda (https://github.com/googleapis/python-aiplatform/issues/3129)
+        except TypeError:
+            response_text = response.candidates[0].content.parts[0]._raw_part.text
+
         return response_text
