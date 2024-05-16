@@ -1,5 +1,5 @@
 
-from llm.gemini_provider import GoogleGeminiProvider
+from llm.old_gemini_provider import GoogleGeminiProvider
 
 GOOGLE_GEMINI_CREDENTIALS_FILE_PATH = "./credentials/concept-graphs-moncada-a807e893ef12.json"
 GOOGLE_GEMINI_PROJECT_ID = "concept-graphs-moncada"

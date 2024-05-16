@@ -9,10 +9,17 @@ import numpy as np
 from PIL import Image
 from tqdm import tqdm
 
+from llm.old_gemini_provider import GoogleGeminiProvider
 import slam.slam_classes
 from utils.file_utils import save_as_json
 from utils.image_utils import crop_image_and_mask
 
+# Credentials
+GOOGLE_GEMINI_CREDENTIALS_FILE_PATH = "./credentials/concept-graphs-moncada-a807e893ef12.json"
+GOOGLE_GEMINI_PROJECT_ID = "concept-graphs-moncada"
+GOOGLE_GEMINI_PROJECT_LOCATION = "us-central1"
+
+# Paths
 RESULT_FILENAME = "cfslam_llava_captions.json"
 
 
@@ -38,6 +45,12 @@ def load_scene_map(map_file_path: str):
 
 
 def main(args):
+
+    # Create Gemini instance
+    llm_service = GoogleGeminiProvider(credentials_file=GOOGLE_GEMINI_CREDENTIALS_FILE_PATH,
+                                       project_id=GOOGLE_GEMINI_PROJECT_ID,
+                                       project_location=GOOGLE_GEMINI_PROJECT_LOCATION,
+                                       model_name=GoogleGeminiProvider.GEMINI_1_0_PRO_VISION)
 
     # Load the scene map
     scene_map = load_scene_map(map_file_path=args.map_file_path)
@@ -88,7 +101,9 @@ def main(args):
                 low_confidences.append(False)
 
             # TODO: Gemini call, save result to "captions"
-            captions.append("TODO")
+            caption = llm_service.generate_text_with_images(prompt="Describe the central object in the image",
+                                                            pil_images=[cropped_image])
+            captions.append(caption)
 
         # Add object captions to caption_dict_list
         caption_dict_list.append(
@@ -96,7 +111,7 @@ def main(args):
              "captions": captions,
              "low_confidences": low_confidences})
 
-    # Save captions to JSON a file
+    # Save result to a JSON file
     save_as_json(obj=caption_dict_list,
                  file_path=os.path.join(args.result_dir_path, RESULT_FILENAME))
 
