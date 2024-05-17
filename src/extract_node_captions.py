@@ -1,6 +1,5 @@
 import argparse
 import gzip
-import json
 import os
 import pickle
 from pathlib import Path
@@ -9,9 +8,10 @@ import numpy as np
 from PIL import Image
 from tqdm import tqdm
 
-from llm.old_gemini_provider import GoogleGeminiProvider
 import slam.slam_classes
-from utils.file_utils import save_as_json
+from llm.gemini_provider import GoogleGeminiProvider
+from utils.file_utils import (create_directories_for_file, read_text_from_file,
+                              save_as_json, save_text_to_file)
 from utils.image_utils import crop_image_and_mask
 
 # Credentials
@@ -57,9 +57,7 @@ def main(args):
 
     caption_dict_list = []
 
-    for obj_idx, obj in tqdm(
-        enumerate(scene_map), total=len(scene_map), desc="Iterating over objects..."
-    ):  # for each object
+    for obj_idx, obj in tqdm(enumerate(scene_map), total=len(scene_map), desc="Iterating over objects..."):  # for each object
 
         # Get images confidence
         conf = np.array(obj["conf"])
@@ -78,7 +76,7 @@ def main(args):
         # One low (True) or high (False) confidence per detection
         low_confidences = list()
 
-        for det_idx in tqdm(det_idx_most_conf, desc="Iterating over detections..."):
+        for det_idx in tqdm(det_idx_most_conf, desc=f"Iterating over detections from object {obj_idx}..."):
 
             image = Image.open(
                 obj["color_path"][det_idx]).convert("RGB")  # image
@@ -100,9 +98,24 @@ def main(args):
             else:
                 low_confidences.append(False)
 
-            # TODO: Gemini call, save result to "captions"
-            caption = llm_service.generate_text_with_images(prompt="Describe the central object in the image",
-                                                            pil_images=[cropped_image])
+            # Get caption result file
+            caption_output_file_path = os.path.join(args.scene_dir_path,
+                                                    "llm_results",
+                                                    "extract_node_captions",
+                                                    f"object_{obj_idx}",
+                                                    f"detection_{obj_idx}_{det_idx}.txt")
+
+            if os.path.exists(caption_output_file_path):  # File already exists
+                print(f"File already exists {caption_output_file_path}")
+                caption = read_text_from_file(
+                    file_path=caption_output_file_path)
+            else:  # File doesn't exist
+                caption = llm_service.generate_text_with_images(prompt="Describe with 2 or 3 sentences maximum the central element of the image",
+                                                                pil_images=[cropped_image])
+                create_directories_for_file(caption_output_file_path)
+                save_text_to_file(text=caption,
+                                  output_path=caption_output_file_path)
+
             captions.append(caption)
 
         # Add object captions to caption_dict_list
@@ -112,13 +125,21 @@ def main(args):
              "low_confidences": low_confidences})
 
     # Save result to a JSON file
+    result_file_path = os.path.join(args.result_dir_path, RESULT_FILENAME)
+    create_directories_for_file(result_file_path)
     save_as_json(obj=caption_dict_list,
-                 file_path=os.path.join(args.result_dir_path, RESULT_FILENAME))
+                 file_path=result_file_path)
 
 
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser(description="TODO: program description")
+
+    parser.add_argument("--scene-dir-path",
+                        "-s",
+                        type=str,
+                        required=True,
+                        help="Path to the scene folder")
 
     parser.add_argument("--map-file-path",
                         "-m",

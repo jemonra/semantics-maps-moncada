@@ -1,6 +1,36 @@
 import json
+import os
 import pickle
 from typing import Union
+
+
+def save_text_to_file(text: str, output_path: str):
+    """
+    Saves text to a file.
+
+    Args:
+        text (str): The extracted text from the document.
+        output_path (str): The path of the processed document
+
+    Returns:
+        str: The path to the saved text file.
+    """
+    with open(output_path, "w", encoding="utf-8") as file:
+        file.write(text)
+
+
+def read_text_from_file(file_path: str) -> str:
+    """
+    Reads and returns the entire content of a text file.
+
+    Args:
+        file_path (str): The path to the file that needs to be read.
+
+    Returns:
+        str: The content of the file as a string.
+    """
+    with open(file_path, 'r', encoding='utf-8') as file:
+        return file.read()
 
 
 def save_to_pickle(obj: any, file_path: str):
@@ -42,3 +72,18 @@ def save_as_json(obj: Union[dict, list], file_path: str) -> None:
     """
     with open(file_path, "w", encoding="utf-8") as json_file:
         json.dump(obj, json_file, ensure_ascii=False, indent=4)
+
+
+def create_directories_for_file(file_path):
+    """
+    Creates all necessary parent directories for the given file path if they do not already exist.
+
+    This function takes a file path, extracts its directory path, and ensures that this directory
+    path exists by creating any missing directories in the path. It uses the `os.makedirs()` function
+    with `exist_ok=True` to prevent raising an error if the directory already exists.
+
+    Args:
+        file_path (str): The full path to a file for which directories need to be created.
+    """
+    directory_path = os.path.dirname(file_path)
+    os.makedirs(directory_path, exist_ok=True)

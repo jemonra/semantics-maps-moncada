@@ -1,12 +1,11 @@
 import io
-from pathlib import Path
 from typing import List
 
 import google.cloud.aiplatform as aiplatform
 import google.oauth2.service_account
-from vertexai.preview.generative_models import GenerativeModel, Image as GeminiImage
-
 from PIL import Image as PILImage
+from vertexai.preview.generative_models import GenerativeModel
+from vertexai.preview.generative_models import Image as GeminiImage
 
 from llm.llm_service import LLMService
 
@@ -98,8 +97,9 @@ class GoogleGeminiProvider(LLMService):
 
             n_extra_tokens = n_token - self.get_max_input_tokens()
             n_extra_characters = 15 + n_extra_tokens * 4
-            self._info(f"Prompt too long({n_token} t, {len(new_prompt)} c), removing {n_extra_tokens} t {
-                       n_extra_characters} c")
+            self._info(
+                f"Prompt too long({n_token} t, {len(new_prompt)} c), removing {n_extra_tokens} t {n_extra_characters} c"
+            )
             # Delete extra tokens (1 token = 4 characters)
             new_prompt = new_prompt[:-n_extra_characters]
             n_token = self.count_tokens(new_prompt)
