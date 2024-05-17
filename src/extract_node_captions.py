@@ -20,12 +20,13 @@ GOOGLE_GEMINI_PROJECT_ID = "concept-graphs-moncada"
 GOOGLE_GEMINI_PROJECT_LOCATION = "us-central1"
 
 # Paths
-RESULT_FILENAME = "cfslam_llava_captions.json"
+CAPTIONS_FILENAME = "cfslam_llava_captions.json"
 
 
 def load_scene_map(map_file_path: str):
     """
     TODO
+    WARNING: repeated method
     """
     scene_map = slam.slam_classes.MapObjectList()
     with gzip.open(Path(map_file_path), "rb") as file:
@@ -125,7 +126,7 @@ def main(args):
              "low_confidences": low_confidences})
 
     # Save result to a JSON file
-    result_file_path = os.path.join(args.result_dir_path, RESULT_FILENAME)
+    result_file_path = os.path.join(args.cache_dir_path, CAPTIONS_FILENAME)
     create_directories_for_file(result_file_path)
     save_as_json(obj=caption_dict_list,
                  file_path=result_file_path)
@@ -155,8 +156,8 @@ if __name__ == "__main__":
                         help="")
 
     # TODO: help
-    parser.add_argument("--result-dir-path",
-                        "-r",
+    parser.add_argument("--cache-dir-path",
+                        "-c",
                         type=str,
                         required=True,
                         help="")

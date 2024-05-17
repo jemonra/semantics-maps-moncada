@@ -74,6 +74,24 @@ def save_as_json(obj: Union[dict, list], file_path: str) -> None:
         json.dump(obj, json_file, ensure_ascii=False, indent=4)
 
 
+def load_json_as_dict(file_path: str):
+    """
+    Reads a JSON file from the specified path and returns its content as a dictionary.
+
+    Args:
+        file_path(str): The path to the JSON file to be read.
+
+    Returns:
+        dict: A dictionary containing the JSON file's data.
+
+    Raises:
+        FileNotFoundError: If the file does not exist at the specified path.
+        JSONDecodeError: If the file is not a valid JSON file.
+    """
+    with open(file_path, 'r', encoding="utf-8") as f:
+        return json.load(f)
+
+
 def create_directories_for_file(file_path):
     """
     Creates all necessary parent directories for the given file path if they do not already exist.

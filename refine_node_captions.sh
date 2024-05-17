@@ -8,7 +8,7 @@ export SCENE_NAME=room0
 
 export PKL_FILENAME=full_pcd_none_overlap_maskconf0.95_simsum1.2_dbscan.1_merge20_masksub_post.pkl.gz
 
-python ./src/extract_node_captions.py \
+python ./src/refine_node_captions.py \
     --scene-dir-path ${REPLICA_ROOT}/${SCENE_NAME} \
     --map-file-path ${REPLICA_ROOT}/${SCENE_NAME}/pcd_saves/${PKL_FILENAME} \
     --cache-dir-path ${REPLICA_ROOT}/${SCENE_NAME}/sg_cache \
