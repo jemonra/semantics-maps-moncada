@@ -5,10 +5,12 @@ from typing import List
 
 from PIL import Image
 
+from prompt.refinement_prompt import RefinementPrompt
+
 
 class LLMService(ABC):
 
-    MAX_ATTEMPTS = 10
+    JSON_MAX_ATTEMPTS = 10
 
     @abstractmethod
     def get_provider_name(self) -> str:
@@ -146,3 +148,11 @@ class LLMService(ABC):
 
         self._info("Couldn't get a valid JSON response, max attempts exceeded")
         return ""
+
+    def refine_captions(self, captions_dict_str):
+
+        prompt = RefinementPrompt()
+        prompt_text = prompt.get_prompt_as_text(captions_dict_str)
+
+        return self.generate_json(prompt_text,
+                                  max_attempts=self.JSON_MAX_ATTEMPTS)

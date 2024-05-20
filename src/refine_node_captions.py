@@ -47,7 +47,7 @@ def main(args):
     llm_service = GoogleGeminiProvider(credentials_file=GOOGLE_GEMINI_CREDENTIALS_FILE_PATH,
                                        project_id=GOOGLE_GEMINI_PROJECT_ID,
                                        project_location=GOOGLE_GEMINI_PROJECT_LOCATION,
-                                       model_name=GoogleGeminiProvider.GEMINI_1_0_PRO_VISION)
+                                       model_name=GoogleGeminiProvider.GEMINI_1_5_PRO)
 
     # Load the scene map
     scene_map = load_scene_map(map_file_path=args.map_file_path)
