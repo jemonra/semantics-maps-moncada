@@ -99,7 +99,8 @@ def main(args):
             else:
                 low_confidences.append(False)
 
-            # Get caption result file
+            # Get caption file path
+            # TODO: change these paths with constants
             caption_output_file_path = os.path.join(args.scene_dir_path,
                                                     "llm_results",
                                                     "extract_node_captions",
@@ -107,9 +108,11 @@ def main(args):
                                                     f"detection_{obj_idx}_{det_idx}.txt")
 
             if os.path.exists(caption_output_file_path):  # File already exists
-                print(f"File already exists {caption_output_file_path}")
+                print(
+                    f"File already exists {caption_output_file_path}, skipping LLM call...")
                 caption = read_text_from_file(
                     file_path=caption_output_file_path)
+
             else:  # File doesn't exist
                 caption = llm_service.generate_text_with_images(prompt="Describe with 2 or 3 sentences maximum the central element of the image",
                                                                 pil_images=[cropped_image])

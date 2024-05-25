@@ -1,4 +1,4 @@
-class RefinementPrompt:
+class CaptionRefinementPrompt:
 
     SYSTEM_PROMPT = """Identify and describe objects in scenes. 
     Input and output must be in JSON format. 

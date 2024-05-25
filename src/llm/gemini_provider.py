@@ -112,8 +112,12 @@ class GoogleGeminiProvider(LLMService):
         """
         prompt = self.trim_prompt(prompt)
         response = self.model.generate_content(prompt)
-        response = response.candidates[0].content.parts[0].text
-        return response
+        try:
+            response_text = response.candidates[0].content.parts[0].text
+        # VertexAI bug running on conda (https://github.com/googleapis/python-aiplatform/issues/3129)
+        except TypeError:
+            response_text = response.candidates[0].content.parts[0]._raw_part.text
+        return response_text
 
     def pil_image_to_gemini_image(self, pil_image: PILImage.Image):
         """

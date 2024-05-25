@@ -5,7 +5,8 @@ from typing import List
 
 from PIL import Image
 
-from prompt.refinement_prompt import RefinementPrompt
+from prompt.caption_extraction_prompt import CaptionExtractionPrompt
+from prompt.caption_refinement_prompt import CaptionRefinementPrompt
 
 
 class LLMService(ABC):
@@ -149,9 +150,23 @@ class LLMService(ABC):
         self._info("Couldn't get a valid JSON response, max attempts exceeded")
         return ""
 
-    def refine_captions(self, captions_dict_str):
+    def extract_captions(self, images):
+        """
+        TODO
+        """
 
-        prompt = RefinementPrompt()
+        prompt = CaptionExtractionPrompt()
+        prompt_text = prompt.get_prompt_as_text()
+
+        return self.generate_text_with_images(prompt=prompt_text,
+                                              pil_images=images)
+
+    def refine_captions(self, captions_dict_str):
+        """
+        TODO
+        """
+
+        prompt = CaptionRefinementPrompt()
         prompt_text = prompt.get_prompt_as_text(captions_dict_str)
 
         return self.generate_json(prompt_text,
