@@ -126,9 +126,14 @@ class OpenAIProvider(LLMService):
         input_tokens = self.tokenizer.encode(input)
         output_tokens = self.tokenizer.encode(output)
 
+        if self.is_vision():
+            images_cost = len(images) * self.get_cost_per_input_image()
+        else:
+            images_cost = 0
+
         return len(input_tokens) * self.get_cost_per_input_token() + \
             len(output_tokens) * self.get_cost_per_output_token() + \
-            len(images) * self.get_cost_per_input_image()
+            images_cost
 
     def generate_text(self, prompt: str) -> Tuple[str, float]:
         prompt = self.trim_prompt(prompt)
@@ -142,7 +147,7 @@ class OpenAIProvider(LLMService):
         response_cost = self.calculate_cost(input=prompt,
                                             output=response_text,
                                             images=[])
-        print(f"cost: {response_cost}$")
+        # print(f"cost: {response_cost}$")
 
         return response_text, response_cost
 
@@ -187,11 +192,11 @@ class OpenAIProvider(LLMService):
 
         response_cost = self.calculate_cost(input=prompt,
                                             output=response_text, images=pil_images)
-        print(f"cost: {response_cost}$")
+        # print(f"cost: {response_cost}$")
 
         return response_text, response_cost
 
-    def chat(self, initial_prompt_text: str, conversation_history: list, user_input: str):
+    def chat(self, initial_prompt_text: str, conversation_history: list, user_input: str, include_response_in_history: bool = True):
         """
         TODO
         """
@@ -210,7 +215,10 @@ class OpenAIProvider(LLMService):
         )
 
         assistant_response = response.choices[0].message.content
-        conversation_history.append(
-            {"role": "assistant", "content": assistant_response})
 
+        if include_response_in_history:
+            conversation_history.append(
+                {"role": "assistant", "content": assistant_response})
+
+        # TODO: return cost
         return conversation_history, assistant_response

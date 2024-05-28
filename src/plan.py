@@ -25,14 +25,15 @@ def main(args):
                          model_name=OpenAIProvider.GPT_3_5_TURBO,
                          max_output_tokens=4096)
 
-    # Load semantic map
-    semantic_map = load_json(file_path=args.semantic_map_path)
-    semantic_map_str = json.dumps(semantic_map)
+    # Load the object list
+    object_list = load_json(file_path=args.object_list_path)
+    object_list_str = json.dumps(object_list)
 
     # Start conversation
     planner_prompt = PlannerPrompt()
     planner_prompt_text = planner_prompt.get_prompt_as_text(
-        semantic_map_str=semantic_map_str)
+        object_list_str=object_list_str)
+    print(planner_prompt_text)
 
     # First message
     planner_conversation_history, planner_response = llm.chat(
@@ -45,32 +46,35 @@ def main(args):
         # Get planner response
         planner_conversation_history, planner_response = llm.chat(initial_prompt_text=planner_prompt,
                                                                   conversation_history=planner_conversation_history,
-                                                                  user_input=user_input)
+                                                                  user_input=user_input,
+                                                                  include_response_in_history=False)
         print("######### ORIGINAL RESPONSE #########")
         print_llm_response(llm, planner_response)
 
         # Self reflect the response
-        self_reflection_response = llm.planner_self_reflect(semantic_map_str=semantic_map,
-                                                            planner_response=planner_response)
+        self_reflection_response, _ = llm.planner_self_reflect(object_list_str=object_list_str,
+                                                               planner_response=planner_response)
         print("######### SELF-REFLECTION RESPONSE #########")
         print_llm_response(llm, self_reflection_response)
 
         # Correct the response
-        correction_response = llm.planner_correct(semantic_map_str=semantic_map_str,
-                                                  planner_response=planner_response,
-                                                  self_reflection_response=self_reflection_response)
+        correction_response, _ = llm.planner_correct(object_list_str=object_list_str,
+                                                     planner_response=planner_response,
+                                                     self_reflection_response=self_reflection_response)
         print("######### CORRECTION RESPONSE #########")
         print_llm_response(llm, correction_response)
+        planner_conversation_history.append(
+            {"role": "assistant", "content": correction_response})
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="TODO: program description")
 
-    parser.add_argument("--semantic-map-path",
-                        "-s",
+    parser.add_argument("--object-list-path",
+                        "-o",
                         type=str,
                         required=True,
-                        help="Path to the semantic map JSON")
+                        help="Path to the file listing all the objects in JSON format")
 
     args = parser.parse_args()
 

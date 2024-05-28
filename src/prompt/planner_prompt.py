@@ -20,7 +20,7 @@ class PlannerPrompt(ClassicalPrompt):
     5. "explanation": A brief explanation of what the most relevant object(s) is(are), and how they achieve the user-specified task.
     
     ### 3D SCENE ###
-    {{semantic_map}}
+    {{object_list_str}}
     """
 
     def get_prompt_template(self): return self.PROMPT_TEMPLATE

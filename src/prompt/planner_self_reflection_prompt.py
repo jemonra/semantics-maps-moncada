@@ -23,7 +23,7 @@ class PlannerSelfReflectionPrompt(ClassicalPrompt):
     | 5. "explanation": A brief explanation of what the most relevant object(s) is(are), and how they achieve the user-specified task.
     
     The 3D SCENE was:
-    {{semantic_map_str}}
+    {{object_list_str}}
 
     The ORIGINAL RESPONSE was:
     {{planner_response}}
@@ -59,3 +59,5 @@ class PlannerSelfReflectionPrompt(ClassicalPrompt):
     SUGGESTIONS FOR IMPROVEMENT
     Based on your critique, please suggest specific improvements. These can include corrections to factual errors, inclusion of missing relevant objects, reordering of objects by relevance, or clarifications to enhance understanding.
     """
+
+    def get_prompt_template(self): return self.PROMPT_TEMPLATE

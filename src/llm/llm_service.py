@@ -1,6 +1,6 @@
 import json
 from abc import ABC, abstractmethod
-from typing import List
+from typing import List, Tuple
 
 from PIL import Image
 
@@ -25,7 +25,7 @@ class LLMService(ABC):
         pass
 
     @abstractmethod
-    def generate_text(self, prompt: str) -> str:
+    def generate_text(self, prompt: str) -> Tuple[str, float]:
         """
         Abstract method to generate a text response based on the given prompt.
 
@@ -33,12 +33,13 @@ class LLMService(ABC):
             prompt (str): The input prompt string used to generate text.
 
         Returns:
-            str: The generated text from the language model.
+            Tuple[str, float]: A tuple containing the generated text from the language model 
+                               and the cost of the LLM call.
         """
         pass
 
     @abstractmethod
-    def generate_text_with_images(self, prompt: str, pil_images: List[Image.Image]) -> str:
+    def generate_text_with_images(self, prompt: str, pil_images: List[Image.Image]) -> Tuple[str, float]:
         """
         Abstract method to generate text using the LLM based on the provided prompt and images.
 
@@ -47,7 +48,8 @@ class LLMService(ABC):
             pil_images (List[str]): List of PIL images to be included in the prompt.
 
         Returns:
-            str: The generated text from the model.
+            Tuple[str, float]: A tuple containing the generated text from the language model 
+                               and the cost of the LLM call.
         """
         pass
 
@@ -74,18 +76,15 @@ class LLMService(ABC):
         Returns:
             str: The extracted text that is likely in JSON format.
         """
-        # Remove backticks, "json" at the start and end
         start_index = text.find("{")
-        # Include the closing bracket in the substring
         end_index = text.rfind("}") + 1
 
-        # Extract and return the substring between these indicess
         if start_index != -1 and end_index != -1:
             return text[start_index:end_index]
         else:
             return ""
 
-    def generate_json(self, prompt_text: str, max_attempts: int) -> str:
+    def generate_json(self, prompt_text: str, max_attempts: int) -> Tuple[str, float]:
         """
         Attempts to generate a valid JSON response from a given text prompt.
 
@@ -99,26 +98,36 @@ class LLMService(ABC):
 
         Returns:
             str: The first valid JSON response as a string, or the last invalid response if no valid response is generated.
+        Returns:
+            Tuple[str, float]: A tuple containing the first valid JSON response as a string, or the last invalid response if
+                               no valid response is generated; and the cost of all the LLM call.
         """
+        total_cost = .0
         attempt = 1
         while attempt <= max_attempts:
             try:
-                response = self.generate_text(prompt_text)
-                response = self._clean_response(response)
-                json.loads(response)
-                return response  # Return the valid JSON response
+                response, cost = self.generate_text(prompt_text)
+                total_cost += cost
 
-            except Exception as e:
-                self._info(
-                    f"Error generating JSON on attempt {attempt}: {str(e)}")
+                # Clean response
+                response = self._clean_response(response)
+                # Try to parse response
+                json.loads(response)
+
+                return response, total_cost  # Return the valid JSON response
+
+            except json.decoder.JSONDecodeError as e:
+                self._info(f"Error generating JSON on attempt {
+                           attempt}: {str(e)}")
                 attempt += 1  # Increment attempt counter
 
         self._info("Couldn't get a valid JSON response, max attempts exceeded")
-        return ""
+        # Returns the last response, potentially invalid if no valid JSON was generated
+        return "", total_cost
 
-    def generate_json_with_images(self, prompt_text: str, pil_images: List[Image.Image], max_attempts: int) -> str:
+    def generate_json_with_images(self, prompt_text: str, pil_images: List[Image.Image], max_attempts: int) -> Tuple[str, float]:
         """
-        Attempts to generate a valid JSON response from a given text prompt and associated image paths.
+        Attempts to generate a valid JSON response from a given text prompt and some images.
 
         This method repeatedly calls `generate_text_with_images` to generate responses based on the prompt text and
         provided images, then tries to parse and validate these responses as JSON. If a response fails to parse, it retries
@@ -130,18 +139,24 @@ class LLMService(ABC):
             max_attempts (int): The maximum number of attempts to generate a valid JSON response.
 
         Returns:
-            str: The first valid JSON response as a string, or the last invalid response if no valid response is generated.
+            Tuple[str, float]: A tuple containing the first valid JSON response as a string, or the last invalid response if
+                               no valid response is generated; and the cost of all the LLM call.
         """
         attempt = 1
+        total_cost = .0
         while attempt <= max_attempts:
             try:
-                response = self.generate_text_with_images(
+                response, cost = self.generate_text_with_images(
                     prompt_text, pil_images)
-                response = self._clean_response(response)
-                json.loads(response)
-                return response  # Return the valid JSON response
+                total_cost += cost
 
-            except Exception as e:
+                # Clean response
+                response = self._clean_response(response)
+                # Try to parse response
+                json.loads(response)
+                return response, total_cost  # Return the valid JSON response
+
+            except json.decoder.JSONDecodeError as e:
                 self._info(
                     f"Error generating JSON on attempt {attempt}: {str(e)}")
                 attempt += 1  # Increment attempt counter
@@ -149,13 +164,12 @@ class LLMService(ABC):
             attempt += 1
 
         self._info("Couldn't get a valid JSON response, max attempts exceeded")
-        return ""
+        return "", total_cost
 
     def extract_captions(self, images):
         """
         TODO
         """
-
         prompt = CaptionExtractionPrompt()
         prompt_text = prompt.get_prompt_as_text()
 
@@ -166,7 +180,6 @@ class LLMService(ABC):
         """
         TODO
         """
-
         prompt = CaptionRefinementPrompt()
         prompt_text = prompt.get_prompt_as_text(captions_dict_str)
 
@@ -187,4 +200,5 @@ class LLMService(ABC):
         """
         prompt = PlannerCorrectionPrompt()
         prompt_text = prompt.get_prompt_as_text(**prompt_data_dict)
-        return self.generate_text(prompt_text)
+        return self.generate_json(prompt_text,
+                                  max_attempts=self.JSON_MAX_ATTEMPTS)
