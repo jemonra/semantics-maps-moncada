@@ -1,4 +1,7 @@
-class PlannerPrompt:
+from prompt.classical_prompt import ClassicalPrompt
+
+
+class PlannerPrompt(ClassicalPrompt):
 
     PROMPT_TEMPLATE = """
     ### INSTRUCTION ###
@@ -20,10 +23,4 @@ class PlannerPrompt:
     {{semantic_map}}
     """
 
-    def get_prompt_as_text(self, semantic_map_str):
-
-        prompt_text = self.PROMPT_TEMPLATE
-        prompt_text = prompt_text.replace(
-            "{{semantic_map}}", semantic_map_str)
-
-        return prompt_text
+    def get_prompt_template(self): return self.PROMPT_TEMPLATE

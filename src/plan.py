@@ -56,6 +56,11 @@ def main(args):
         print_llm_response(llm, self_reflection_response)
 
         # Correct the response
+        correction_response = llm.planner_correct(semantic_map_str=semantic_map_str,
+                                                  planner_response=planner_response,
+                                                  self_reflection_response=self_reflection_response)
+        print("######### CORRECTION RESPONSE #########")
+        print_llm_response(llm, correction_response)
 
 
 if __name__ == "__main__":
