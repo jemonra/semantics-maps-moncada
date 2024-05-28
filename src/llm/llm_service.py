@@ -1,5 +1,4 @@
 import json
-import os
 from abc import ABC, abstractmethod
 from typing import List
 
@@ -7,6 +6,7 @@ from PIL import Image
 
 from prompt.caption_extraction_prompt import CaptionExtractionPrompt
 from prompt.caption_refinement_prompt import CaptionRefinementPrompt
+from prompt.planner_self_reflection_prompt import PlannerSelfReflectionPrompt
 
 
 class LLMService(ABC):
@@ -171,3 +171,12 @@ class LLMService(ABC):
 
         return self.generate_json(prompt_text,
                                   max_attempts=self.JSON_MAX_ATTEMPTS)
+
+    def planner_self_reflect(self, semantic_map_str: str, planner_response: str):
+        """
+        TODO
+        """
+        prompt = PlannerSelfReflectionPrompt()
+        prompt_text = prompt.get_prompt_as_text(semantic_map_str=semantic_map_str,
+                                                planner_response=planner_response)
+        return self.generate_text(prompt)

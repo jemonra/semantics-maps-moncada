@@ -74,7 +74,7 @@ def save_as_json(obj: Union[dict, list], file_path: str) -> None:
         json.dump(obj, json_file, ensure_ascii=False, indent=4)
 
 
-def load_json(file_path: str):
+def load_json(file_path: str) -> dict:
     """
     TODO
     """
