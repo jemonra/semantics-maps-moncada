@@ -1,0 +1,152 @@
+[
+    {
+        "id": "obj_001",
+        "bbox_extent": [
+            1.2,
+            0.8,
+            2.0
+        ],
+        "bbox_center": [
+            3.5,
+            1.0,
+            4.5
+        ],
+        "object_tag": "chair",
+        "caption": "A wooden chair with four legs."
+    },
+    {
+        "id": "obj_002",
+        "bbox_extent": [
+            2.0,
+            1.5,
+            1.0
+        ],
+        "bbox_center": [
+            5.0,
+            0.75,
+            3.0
+        ],
+        "object_tag": "table",
+        "caption": "A rectangular table with metal legs."
+    },
+    {
+        "id": "obj_003",
+        "bbox_extent": [
+            0.5,
+            0.5,
+            0.5
+        ],
+        "bbox_center": [
+            2.0,
+            0.25,
+            1.5
+        ],
+        "object_tag": "lamp",
+        "caption": "A small desk lamp with a round base."
+    },
+    {
+        "id": "obj_004",
+        "bbox_extent": [
+            1.0,
+            1.0,
+            1.0
+        ],
+        "bbox_center": [
+            1.5,
+            0.5,
+            2.5
+        ],
+        "object_tag": "box",
+        "caption": "A cardboard box sealed with tape."
+    },
+    {
+        "id": "obj_005",
+        "bbox_extent": [
+            0.3,
+            1.0,
+            0.3
+        ],
+        "bbox_center": [
+            6.0,
+            0.5,
+            3.5
+        ],
+        "object_tag": "vase",
+        "caption": "A tall ceramic vase with floral patterns."
+    },
+    {
+        "id": "obj_006",
+        "bbox_extent": [
+            3.0,
+            2.0,
+            1.0
+        ],
+        "bbox_center": [
+            7.5,
+            1.0,
+            6.0
+        ],
+        "object_tag": "couch",
+        "caption": "A three-seater couch with cushions."
+    },
+    {
+        "id": "obj_007",
+        "bbox_extent": [
+            2.0,
+            1.0,
+            2.0
+        ],
+        "bbox_center": [
+            4.0,
+            0.5,
+            5.0
+        ],
+        "object_tag": "shelf",
+        "caption": "A wooden bookshelf with five shelves."
+    },
+    {
+        "id": "obj_008",
+        "bbox_extent": [
+            0.6,
+            1.2,
+            0.6
+        ],
+        "bbox_center": [
+            3.0,
+            0.6,
+            2.0
+        ],
+        "object_tag": "plant",
+        "caption": "A potted plant with green leaves."
+    },
+    {
+        "id": "obj_009",
+        "bbox_extent": [
+            1.5,
+            1.0,
+            0.5
+        ],
+        "bbox_center": [
+            8.0,
+            0.5,
+            1.0
+        ],
+        "object_tag": "bed",
+        "caption": "A single bed with a blue blanket."
+    },
+    {
+        "id": "obj_010",
+        "bbox_extent": [
+            1.0,
+            2.0,
+            1.0
+        ],
+        "bbox_center": [
+            9.0,
+            1.0,
+            7.0
+        ],
+        "object_tag": "wardrobe",
+        "caption": "A tall wardrobe with mirrored doors."
+    }
+]

@@ -33,7 +33,6 @@ def main(args):
     planner_prompt = PlannerPrompt()
     planner_prompt_text = planner_prompt.get_prompt_as_text(
         object_list_str=object_list_str)
-    print(planner_prompt_text)
 
     # First message
     planner_conversation_history, planner_response = llm.chat(
@@ -63,7 +62,9 @@ def main(args):
                                                      self_reflection_response=self_reflection_response)
         print("######### CORRECTION RESPONSE #########")
         print_llm_response(llm, correction_response)
+
         planner_conversation_history.append(
+            # include corrected response in conversation history
             {"role": "assistant", "content": correction_response})
 
 
