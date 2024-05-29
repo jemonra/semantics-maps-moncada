@@ -11,7 +11,7 @@ from tqdm import tqdm
 import slam.slam_classes
 from llm.gemini_provider import GoogleGeminiProvider
 from utils.file_utils import (create_directories_for_file, read_text_from_file,
-                              save_as_json, save_text_to_file)
+                              save_as_json, save_png_image, save_text_to_file)
 from utils.image_utils import crop_image_and_mask
 
 # Credentials
@@ -89,7 +89,15 @@ def main(args):
 
             cropped_image, cropped_mask = crop_image_and_mask(
                 image, mask, x1, y1, x2, y2, padding=args.object_images_padding)
-            # TODO: apply masking option? modify cropped_image?
+
+            # Save cropped image
+            cropped_image_path = os.path.join(args.scene_dir_path,
+                                              "cropped_detection_images",
+                                              f"object_{obj_idx}",
+                                              f"detection_{obj_idx}_{det_idx}.png")
+            create_directories_for_file(cropped_image_path)
+            save_png_image(cropped_image,
+                           output_path=cropped_image_path)
 
             if cropped_image.size[0] * cropped_image.size[1] < 70 * 70:
                 low_confidences.append(True)
