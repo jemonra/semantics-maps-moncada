@@ -1,1 +1,1 @@
-# mapir-concept-graph
+# concept-graph-moncada
