@@ -15,29 +15,44 @@ Keywords: Intelligent Robotics, Semantic maps, Machine learning, Large models.
 
 ## Repository contents
 
-All the developed code is written in Python and is contained in the ``src/`` folder. This folder is organized into the following subdirectories:
+The repository is divided into the following folders.
 
-### ``dataset``
+### ``src``
+
+All the developed Python code is contained in the ``src/`` folder. This folder is organized into the following subdirectories:
+
+#### ``dataset``
 This folder contains utility classes for handling datasets, including:
 
 - Robot@VirtualHome: A dataset on which some tests were carried out.
 - ScanNet: A dataset consisting of 3D scans of indoor scenes, used for real-world validation.
 
-### ``llm``
+#### ``llm``
 This folder includes classes for generating text using proprietary Large Language Models (LLMs), such as:
 
 - Gemini: Utilized for generating textual descriptions of objects and scenes.
 - ChatGPT: Employed for describing relationships among objects and providing contextual understanding in HRI scenarios.
 
-### ``prompt``
+#### ``prompt``
 This folder contains all the prompts used in the method. These prompts are essential for interacting with the LLMs and guiding their output to generate meaningful semantic information.
 
-### ``slam``
+#### ``slam``
 This folder comprises classes related to Simultaneous Localization and Mapping (SLAM) results.
 
-### ``utils``
+#### ``utils``
 This folder provides utility classes for various tasks such as:
 
-In the ``data/`` folder some examples of the method execution can be found, especially in the files:
+### ``data``
+
+In the ``data/`` folder some examples of the method execution can be found:
 - ``replica_semantic_map.json``: example of a semantic map generated for the ``room0`` sequence from the the Replica dataset.
 - ``scannet_semantic_map.json``: example of a semantic map generated for the ``scene0003_02`` sequence from the ScanNet dataset.
+
+### ``scripts``
+
+The ``scripts`` folder contains the needed scripts to run the whole proposed method in several datasets. Note that in order to use any of them, you must first install the necessary libraries and datasets as described in the original [ConceptGraphs original code](https://github.com/concept-graphs/concept-graphs).
+
+The names of the scripts indicate both the phases of the process to be executed and the names of the datasets on which these phases will be executed.
+- Those scripts starting with ``cg``, ``cgf`` and ``replica`` execute the corresponding process on sequences from the Replica dataset.
+- Those scripts starting with ``ravh`` execute the corresponding process on the Robot@VirtualHome dataset, note that this dataset was used only in an experimental way, so not all the phases are implemented.
+- Those scripts starting with ``sn`` execute the corresponding process on sequences from the ScanNet dataset.
