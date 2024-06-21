@@ -37,3 +37,7 @@ This folder comprises classes related to Simultaneous Localization and Mapping (
 
 ### ``utils``
 This folder provides utility classes for various tasks such as:
+
+In the ``data/`` folder some examples of the method execution can be found, especially in the files:
+- ``replica_semantic_map.json``: example of a semantic map generated for the ``room0`` sequence from the the Replica dataset.
+- ``scannet_semantic_map.json``: example of a semantic map generated for the ``scene0003_02`` sequence from the ScanNet dataset.
