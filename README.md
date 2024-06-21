@@ -14,3 +14,26 @@ The method has been validated using both synthetic (Replica) and real-world (Sca
 Keywords: Intelligent Robotics, Semantic maps, Machine learning, Large models.
 
 ## Repository contents
+
+All the developed code is written in Python and is contained in the ``src/`` folder. This folder is organized into the following subdirectories:
+
+### ``dataset``
+This folder contains utility classes for handling datasets, including:
+
+- Robot@VirtualHome: A dataset on which some tests were carried out.
+- ScanNet: A dataset consisting of 3D scans of indoor scenes, used for real-world validation.
+
+### ``llm``
+This folder includes classes for generating text using proprietary Large Language Models (LLMs), such as:
+
+- Gemini: Utilized for generating textual descriptions of objects and scenes.
+- ChatGPT: Employed for describing relationships among objects and providing contextual understanding in HRI scenarios.
+
+### ``prompt``
+This folder contains all the prompts used in the method. These prompts are essential for interacting with the LLMs and guiding their output to generate meaningful semantic information.
+
+### ``slam``
+This folder comprises classes related to Simultaneous Localization and Mapping (SLAM) results.
+
+### ``utils``
+This folder provides utility classes for various tasks such as:
