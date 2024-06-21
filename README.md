@@ -52,7 +52,7 @@ In the ``data/`` folder some examples of the method execution can be found:
 
 ### ``scripts``
 
-The ``scripts`` folder contains the needed scripts to run the whole proposed method in several datasets. Note that in order to use any of them, you must first install the necessary libraries and datasets as described in the original [ConceptGraphs original code](https://github.com/concept-graphs/concept-graphs).
+The ``scripts`` folder contains the needed scripts to run the whole proposed method in several datasets. Note that in order to use any of them, you must first install the necessary libraries and datasets as described in the original [ConceptGraphs original code](https://github.com/concept-graphs/concept-graphs). The LLaVA installation part can be omitted, as this project is responsible for proposing an alternative method using Gemini and ChatGPT.
 
 The names of the scripts indicate both the phases of the process to be executed and the names of the datasets on which these phases will be executed.
 - Those scripts starting with ``cg``, ``cgf`` and ``replica`` execute the corresponding process on sequences from the Replica dataset.
