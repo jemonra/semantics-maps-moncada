@@ -2,6 +2,8 @@
 
 This project contains the code for the TFG (Trabajo Fin de Grado) "Building and Exploiting Semantic Maps in Robotics Using Large Models", by Jesús Moncada Ramírez, University of Málaga.
 
+![Semantic mapping method overview](./images/english_overview.png "Local Image")
+
 ## Abstract
 Mobile robots are increasingly being deployed in diverse applications across fields such as home assistance, industry, healthcare, or education. A fundamental requirement for these applications, especially when it comes to Human-Robot Interaction (HRI) scenarios, is the robot's ability to interpret and reason about its environment. This ability is often achieved using semantic maps, which enrich the typical geometric/topological representation of the robot workspace with the semantics of its constituent elements (properties, functionalities, relationships, etc.).
 
