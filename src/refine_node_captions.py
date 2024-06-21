@@ -60,7 +60,7 @@ def main(args):
 
         else:  # File doesn't exist
             # Perform LLM call
-            refined_caption = llm_service.refine_captions(
+            refined_caption, _ = llm_service.refine_captions(
                 captions_dict_str=object_with_captions_str)
             # Sleep to avoid Gemini 1.5 max responses per minute error
             time.sleep(10)
@@ -74,6 +74,13 @@ def main(args):
 
         object_with_captions["response"] = refined_caption
         caption_refinement_responses.append(refined_caption)
+
+        # Save caption refinement result to JSON file
+        object_refined_file_path = os.path.join(args.cache_dir_path,
+                                                "cfslam_gpt-4_responses",
+                                                f"{object_with_captions['id']}.json")
+        create_directories_for_file(object_refined_file_path)
+        save_as_json(object_with_captions, object_refined_file_path)
 
     # Save result to a pickle file
     result_file_path = os.path.join(args.cache_dir_path,

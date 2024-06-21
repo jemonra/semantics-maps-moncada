@@ -3,6 +3,8 @@ import os
 import pickle
 from typing import Union
 
+import PIL
+
 
 def save_text_to_file(text: str, output_path: str):
     """
@@ -95,3 +97,17 @@ def create_directories_for_file(file_path):
     """
     directory_path = os.path.dirname(file_path)
     os.makedirs(directory_path, exist_ok=True)
+
+
+def save_png_image(image: PIL.Image, output_path: str):
+    """
+    Saves a PNG image to a file.
+
+    Args:
+        image (PIL.Image.Image): The image to be saved to a file.
+        output_path (str): The path of the image
+
+    Returns:
+        str: The path to the saved text file.
+    """
+    image.save(output_path, "PNG")
