@@ -21,17 +21,21 @@ This work resulted in a paper presented at the conference Jornadas de Automátic
 
 ## 2. Repository Contents
 
-The code contained in this repository is organized into these main folders:
+The code is organized as follows:
 
 ### `concept-graphs/`
 
-Since our work is based on [ConceptGraphs](https://concept-graphs.github.io/) and we needed to apply some modifications to the original code to make it work in our context, we provide here the original ConcepGraphs code with these modifications.
+This folder contains a customized copy of the [ConceptGraphs](https://concept-graphs.github.io/) code. We applied several changes to the original project so it works within our pipeline. To run the complete system, install **this modified version** of ConceptGraphs instead of the upstream release.
 
+### `ConceptGraphsTesting.ipynb`
 
-The project is organized into these main folders:
+This Jupyter notebook was created to run the original ConceptGraphs pipeline inside **Google Colab**. It provides an easy way to experiment with the ConceptGraphs code and to inspect or visualize the results it generates,  
+without needing a full local installation. Use it to quickly test functions, modify parameters, and review output semantic maps in an interactive environment.
 
 ### `src/`
-Holds all Python source code, structured in several subfolders:
+
+Contains all Python source code for post-processing and using the open-vocabulary semantic maps produced by the pipeline.  
+The code is organized into several subfolders:
 
 - `dataset/` – Dataset utilities and loaders.
   - `Robot@VirtualHome`: used for experimental tests.
@@ -62,5 +66,5 @@ Script name prefixes indicate the dataset and phase:
 ## 3. Documentation
 
 For a detailed explanation of the semantic mapping method developed and the exploitation of the generated semantic maps, refer to:
-- [Final Thesis Report](docs/Memoria.pdf)
-- [Final Presentation Slides](docs/Presentacion.pdf)
+- [Thesis Final Report](docs/Memoria.pdf)
+- [Thesis Presentation Slides](docs/Presentacion.pdf)
