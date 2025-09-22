@@ -3,7 +3,7 @@
 Code for the B.Sc. Final Thesis: "Building and Exploiting Semantic Maps in Robotics Using Large Models".
 - Author: [Jesús Moncada Ramírez](https://github.com/jemonra), University of Málaga, academic year 2023-2024.
 
-![Semantic mapping method overview](./images/english_overview.png "Local Image")
+![Semantic mapping method overview](docs/english_overview.png "Local Image")
 
 ## 1. Overview
 
@@ -51,3 +51,9 @@ Script name prefixes indicate the dataset and phase:
 - `cg*`, `cgf*`, `replica*` – Run processes on Replica sequences.
 - `ravh*` – Run processes on Robot@VirtualHome (experimental, not all phases implemented).
 - `sn*` – Run processes on ScanNet sequences.
+
+## 3. Documentation
+
+For a detailed explanation of the semantic mapping method developed and the exploitation of the generated semantic maps, refer to:
+- [Final Thesis Report](docs/Memoria.pdf)
+- [Final Presentation Slides](docs/Presentacion.pdf)
