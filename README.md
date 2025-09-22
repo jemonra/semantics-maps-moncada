@@ -1,60 +1,53 @@
 # concept-graph-moncada
 
-This project contains the code for the TFG (Trabajo Fin de Grado) "Building and Exploiting Semantic Maps in Robotics Using Large Models", by Jesús Moncada Ramírez, University of Málaga.
+Code for the B.Sc. Final Thesis: "Building and Exploiting Semantic Maps in Robotics Using Large Models"
+Author: [Jesús Moncada Ramírez](https://github.com/jemonra), University of Málaga, academic year 2023-2024.
 
 ![Semantic mapping method overview](./images/english_overview.png "Local Image")
 
-## Abstract
-Mobile robots are increasingly being deployed in diverse applications across fields such as home assistance, industry, healthcare, or education. A fundamental requirement for these applications, especially when it comes to Human-Robot Interaction (HRI) scenarios, is the robot's ability to interpret and reason about its environment. This ability is often achieved using semantic maps, which enrich the typical geometric/topological representation of the robot workspace with the semantics of its constituent elements (properties, functionalities, relationships, etc.).
+## 1. Overview
 
-Traditional methods for creating these maps rely on object detectors that can only detect those objects previously seen during training, and predefined knowledge bases like ontologies, limiting the robot's adaptability and functionality. This project presents a method for semantic mapping based on large models, including Large Vision-Language Models (LVLMs) and Large Language Models (LLMs), to handle an open set of object categories and dynamic semantic information.
+Mobile robots benefit from semantic maps that augment geometry and topology with object properties, functions, and relationships—crucial in HRI scenarios. Traditional pipelines rely on closed‑set detectors and fixed ontologies. This project adopts Large Vision–Language Models (LVLMs) and Large Language Models (LLMs) to support an open set of categories and dynamic semantics.
 
-The proposed method, based on ConceptGraphs, utilizes state-of-the-art techniques including Segment Anything (SAM) for object segmentation, CLIP for feature extraction, Gemini 1.5 Pro for generating textual descriptions, and ChatGPT-4o for describing the relationships among objects. The pipeline processes located RGB-D images to create a semantic map represented as a scene graph, where nodes correspond to objects and edges denote their semantic relationships.
+Built on [ConceptGraphs](https://concept-graphs.github.io/), the pipeline uses:
+- Segment Anything (SAM) for object segmentation
+- CLIP for feature extraction
+- Gemini 1.5 Pro for textual descriptions
+- ChatGPT-4o for relationship inference
 
-The method has been validated using both synthetic (Replica) and real-world (ScanNet) datasets, demonstrating its effectiveness in varied environments. The semantic maps generated are further exploited in an HRI scenario, where an LLM-based chatbot, powered by ChatGPT-4o, assists a mobile robot in helping users perform tasks based on their requests. The use of a self-reflection technique ensures the accuracy and relevance of the robot's actions by refining the LLM's responses. This research improves mobile robot adaptability and intelligence, which is demonstrated by success in controlled and real-world environments.
+RGB‑D inputs are converted into a scene graph where nodes are objects and edges are semantic relations. Validation spans synthetic (Replica) and real‑world (ScanNet) datasets. The maps are further exploited in an HRI setting through an LLM‑based chatbot with self‑reflection to refine answers.
 
-Keywords: Intelligent Robotics, Semantic maps, Machine learning, Large models.
+This work resulted in a paper presented at the conference Jornadas de Automática 2024 (Málaga, Spain) titled [_"Modelos a gran escala para mapeo semántico en robótica móvil"_](https://revistas.udc.es/index.php/JA_CEA/article/view/10940) (_Large models for semantic mapping in mobile robotics_).
 
-## Repository contents
+## 2. Repository Contents
 
-The repository is divided into the following folders.
+The project is organized into these main folders:
 
-### ``src``
+### `src/`
+Holds all Python source code, structured in several subfolders:
 
-All the developed Python code is contained in the ``src/`` folder. This folder is organized into the following subdirectories:
+- `dataset/` – Dataset utilities and loaders.
+  - `Robot@VirtualHome`: used for experimental tests.
+  - `ScanNet`: real 3D indoor scans for validation.
+- `llm/` – Interfaces for Large Language Models.
+  - `Gemini`: creates textual descriptions of objects and scenes.
+  - `ChatGPT`: infers object relationships and provides context for HRI.
+- `prompt/` – Prompt files used to query the LLMs and guide their output.
+- `slam/` – Classes and functions for handling Simultaneous Localization and Mapping (SLAM) results.
+- `utils/` – General utilities such as data handling helpers, geometry tools, and I/O functions.
 
-#### ``dataset``
-This folder contains utility classes for handling datasets, including:
+### `data/`
+Contains sample outputs of the method:
+- `replica_semantic_map.json` – Semantic map generated for the `room0` sequence of the Replica dataset.
+- `scannet_semantic_map.json` – Semantic map generated for the `scene0003_02` sequence of the ScanNet dataset.
 
-- Robot@VirtualHome: A dataset on which some tests were carried out.
-- ScanNet: A dataset consisting of 3D scans of indoor scenes, used for real-world validation.
+### `scripts/`
+Executable scripts to run the full pipeline on different datasets.  
+Before using them, install the required libraries and datasets following the
+[ConceptGraphs instructions](https://github.com/concept-graphs/concept-graphs).  
+You can skip the LLaVA installation, as this project replaces it with `Gemini` and `ChatGPT`.
 
-#### ``llm``
-This folder includes classes for generating text using proprietary Large Language Models (LLMs), such as:
-
-- Gemini: Utilized for generating textual descriptions of objects and scenes.
-- ChatGPT: Employed for describing relationships among objects and providing contextual understanding in HRI scenarios.
-
-#### ``prompt``
-This folder contains all the prompts used in the method. These prompts are essential for interacting with the LLMs and guiding their output to generate meaningful semantic information.
-
-#### ``slam``
-This folder comprises classes related to Simultaneous Localization and Mapping (SLAM) results.
-
-#### ``utils``
-This folder provides utility classes for various tasks such as:
-
-### ``data``
-
-In the ``data/`` folder some examples of the method execution can be found:
-- ``replica_semantic_map.json``: example of a semantic map generated for the ``room0`` sequence from the the Replica dataset.
-- ``scannet_semantic_map.json``: example of a semantic map generated for the ``scene0003_02`` sequence from the ScanNet dataset.
-
-### ``scripts``
-
-The ``scripts`` folder contains the needed scripts to run the whole proposed method in several datasets. Note that in order to use any of them, you must first install the necessary libraries and datasets as described in the original [ConceptGraphs original code](https://github.com/concept-graphs/concept-graphs). The LLaVA installation part can be omitted, as this project is responsible for proposing an alternative method using Gemini and ChatGPT.
-
-The names of the scripts indicate both the phases of the process to be executed and the names of the datasets on which these phases will be executed.
-- Those scripts starting with ``cg``, ``cgf`` and ``replica`` execute the corresponding process on sequences from the Replica dataset.
-- Those scripts starting with ``ravh`` execute the corresponding process on the Robot@VirtualHome dataset, note that this dataset was used only in an experimental way, so not all the phases are implemented.
-- Those scripts starting with ``sn`` execute the corresponding process on sequences from the ScanNet dataset.
+Script name prefixes indicate the dataset and phase:
+- `cg*`, `cgf*`, `replica*` – Run processes on Replica sequences.
+- `ravh*` – Run processes on Robot@VirtualHome (experimental, not all phases implemented).
+- `sn*` – Run processes on ScanNet sequences.
