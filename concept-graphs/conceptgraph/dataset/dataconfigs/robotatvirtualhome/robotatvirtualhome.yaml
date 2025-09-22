@@ -1,0 +1,9 @@
+dataset_name: 'robotatvirtualhome'
+camera_params:
+  image_height: 480
+  image_width: 640
+  fx: 304.0859
+  fy: 312.7741
+  cx: 320
+  cy: 240
+  png_depth_scale: 6553.5 #for depth image in png format
