@@ -1,4 +1,4 @@
-# concept-graph-moncada
+# semantics-maps-moncada
 
 Code for the B.Sc. Final Thesis: "Building and Exploiting Semantic Maps in Robotics Using Large Models".
 - Author: [Jesús Moncada Ramírez](https://github.com/jemonra), University of Málaga, academic year 2023-2024.
