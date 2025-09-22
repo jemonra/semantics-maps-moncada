@@ -21,6 +21,13 @@ This work resulted in a paper presented at the conference Jornadas de Automátic
 
 ## 2. Repository Contents
 
+The code contained in this repository is organized into these main folders:
+
+### `concept-graphs/`
+
+Since our work is based on [ConceptGraphs](https://concept-graphs.github.io/) and we needed to apply some modifications to the original code to make it work in our context, we provide here the original ConcepGraphs code with these modifications.
+
+
 The project is organized into these main folders:
 
 ### `src/`
